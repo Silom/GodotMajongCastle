@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "majongcastle": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Code\\game\\_Godot_v4.2.2-stable_mono_win64\\Godot_v4.2.2-stable_mono_win64.exe",
+      "commandLineArgs": "--path C:\\Code\\game\\majongcastle --verbose",
+      "nativeDebugging": true
+    }
+  }
+}

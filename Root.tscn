@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://brce581np23xk"]
+
+[ext_resource type="Script" path="res://Root.cs" id="1_1bhal"]
+
+[node name="Root" type="Node2D"]
+script = ExtResource("1_1bhal")
+
+[node name="NextTurn" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Next"
+
+[node name="UnitContainer" type="Node2D" parent="."]
