@@ -1,5 +1,4 @@
 ﻿using Godot;
-using System.Collections.Generic;
 
 namespace MajongCastle
 {
@@ -15,28 +14,28 @@ namespace MajongCastle
     public class UnitProvisioner
     {
         public Unit UnitEntity { get; set; }
-        public UnitProvisioner(UnitTypes unitType, bool playerOwned = false)
+        public UnitProvisioner(UnitTypes unitType, bool playerOwned = false, bool showUnitToken = true)
         {
             switch (unitType)
             {
                 case UnitTypes.Rat:
-                    constructRat(playerOwned);
+                    constructRat(playerOwned, showUnitToken);
                     break;
                 case UnitTypes.Pesent:
-                    constructRat(playerOwned);
+                    constructPesent(playerOwned, showUnitToken);
                     break;
                 case UnitTypes.Knight:
-                    constructRat(playerOwned);
+                    constructKnight(playerOwned, showUnitToken);
                     break;
                 case UnitTypes.Archer:
-                    constructRat(playerOwned);
+                    constructArcher(playerOwned, showUnitToken);
                     break;
                 default:
                     break;
             }
         }
 
-        private void constructRat(bool playerOwned)
+        private void constructRat(bool playerOwned, bool showUnitToken)
         {
             UnitEntity = new Unit()
             {
@@ -44,10 +43,11 @@ namespace MajongCastle
                 health = 1,
                 attackPower = 1,
                 defensePower = 1,
-                playerOwned = playerOwned
+                playerOwned = playerOwned,
+                showUnitToken = showUnitToken
             };
         }
-        private void constructPesent(bool playerOwned)
+        private void constructPesent(bool playerOwned, bool showUnitToken)
         {
             UnitEntity = new Unit()
             {
@@ -55,10 +55,11 @@ namespace MajongCastle
                 health = 2,
                 attackPower = 1,
                 defensePower = 1,
-                playerOwned = playerOwned
+                playerOwned = playerOwned,
+                showUnitToken = showUnitToken
             };
         }
-        private void constructKnight(bool playerOwned)
+        private void constructKnight(bool playerOwned, bool showUnitToken)
         {
             UnitEntity = new Unit()
             {
@@ -66,10 +67,11 @@ namespace MajongCastle
                 health = 4,
                 attackPower = 2,
                 defensePower = 1,
-                playerOwned = playerOwned
+                playerOwned = playerOwned,
+                showUnitToken = showUnitToken
             };
         }
-        private void constructArcher(bool playerOwned)
+        private void constructArcher(bool playerOwned, bool showUnitToken)
         {
             UnitEntity = new Unit()
             {
@@ -77,7 +79,8 @@ namespace MajongCastle
                 health = 1,
                 attackPower = 2,
                 defensePower = 1,
-                playerOwned = playerOwned
+                playerOwned = playerOwned,
+                showUnitToken = showUnitToken
             };
         }
     }
@@ -89,32 +92,26 @@ namespace MajongCastle
         public int attackPower;
         public int defensePower;
         public bool playerOwned;
+        public bool showUnitToken;
 
-        private List<Trait> traits;
 
         public override void _Ready()
         {
-            RenderNode();
-            QueueRedraw();
-        }
-
-        public override void _Process(double delta)
-        {
-        }
-
-        public override void _Draw()
-        {
-        }
-
-        public void RenderNode()
-        {
-            DrawCircle(Position, 32, Colors.Red);
             var label = new Label()
             {
                 Text = enemyName,
                 Position = Position,
             };
             AddChild(label);
+        }
+
+        public override void _Draw()
+        {
+            GD.PushError(showUnitToken);
+            if (showUnitToken)
+            {
+                DrawCircle(new(0, 0), 32, Colors.Red);
+            }
         }
     }
 }

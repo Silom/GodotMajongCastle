@@ -24,7 +24,7 @@ namespace MajongCastle
     {
         private int cellSize = 64;
         private int gridX = 10;
-        private int gridY = 10;
+        private int gridY = 5;
         // TODO this should be organized by some layout component but for the sake of prototyping the grid we remain with this for now
         // 50 is something like a base margin
         private Vector2 marginGameBoardVec = new(50, 150);
@@ -35,6 +35,7 @@ namespace MajongCastle
         private int roundTick = 0;
 
         private Button nextTurnButton;
+        private Node2D unitContainer;
 
 
         // A list of enemies that move in tound tick
@@ -51,6 +52,7 @@ namespace MajongCastle
             nextTurnButton = GetNode<Button>("NextTurn");
             nextTurnButton.Pressed += OnNextTurn;
 
+            unitContainer = GetNode<Node2D>("UnitContainer");
 
             for (int x = 0; x < gridX; x++)
             {
@@ -61,19 +63,20 @@ namespace MajongCastle
                     // Register signals on click areas for onclick event elegation passing x,y
                     var gridCell = new Cell()
                     {
-                        Position = new Vector2(x * cellSize, y * cellSize) + marginGameBoardVec,
+                        // I dont like that the area2d trys to center based of of its collision shape, I cant seem to find a way to change the anchoring
+                        // instead of center we would want top-left in order to draw our grid based on start positions and cell sizes
+                        Position = new Vector2(x * cellSize, y * cellSize) + marginGameBoardVec + new Vector2(cellSize, cellSize) / 2,
                         Size = new Vector2(cellSize, cellSize),
                         X = x,
                         Y = y,
                     };
-                    AddChild(gridCell);
-                    // TODO mak this a dict or 2d for better access
+                    unitContainer.AddChild(gridCell);
                     gridCells.Add(gridCell);
 
                     var amount = rng.RandfRange(1, 3);
                     if (amount <= 2)
                     {
-                        var prov = new UnitProvisioner(UnitTypes.Rat);
+                        var prov = new UnitProvisioner(UnitTypes.Rat, false, true);
                         AddChild(prov.UnitEntity);
 
                         gameBoard[x].Add(prov.UnitEntity);
@@ -98,7 +101,7 @@ namespace MajongCastle
         // Signal setup for placing player units
         private void OnClickGridCell()
         {
-            var unitToken = new UnitProvisioner(UnitTypes.Pesent);
+            //var unitToken = new UnitProvisioner(UnitTypes.Pesent, true, true);
             //unitToken.UnitEntity
 
             // TODO detect which coord was clicked
@@ -148,6 +151,8 @@ namespace MajongCastle
                     {
                         gameBoard[i][0] = enemyPipeline[i][0];
                         enemyPipeline[i].RemoveAt(0);
+                        gameBoard[i][0].showUnitToken = true;
+                        gameBoard[i][0].QueueRedraw();
                     }
                 }
             }
@@ -241,7 +246,7 @@ namespace MajongCastle
             for (int i = 0; i < amount; i++)
             {
                 // TODO implement a seed and powerlevel ddynamic for randomized results
-                var provisionedEnemy = new UnitProvisioner(UnitTypes.Rat);
+                var provisionedEnemy = new UnitProvisioner(UnitTypes.Rat, false, false);
                 newEnemies.Add(provisionedEnemy.UnitEntity);
                 AddChild(provisionedEnemy.UnitEntity);
             }

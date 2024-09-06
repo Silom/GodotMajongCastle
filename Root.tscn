@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://brce581np23xk"]
+[gd_scene load_steps=3 format=3 uid="uid://brce581np23xk"]
 
 [ext_resource type="Script" path="res://Root.cs" id="1_1bhal"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4clw6"]
 
 [node name="Root" type="Node2D"]
 script = ExtResource("1_1bhal")
@@ -11,3 +13,10 @@ offset_bottom = 8.0
 text = "Next"
 
 [node name="UnitContainer" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(150, 50)
+shape = SubResource("RectangleShape2D_4clw6")
